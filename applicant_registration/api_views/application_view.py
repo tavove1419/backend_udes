@@ -9,6 +9,8 @@ from ..services.application_service import (
     update_applicant,
     list_applications
 )
+from ..services.application_service import get_application_full
+from ..serializers import ApplicationFullSerializer
 from ..models import Application
 from ..serializers import ApplicationListSerializer
 
@@ -73,4 +75,16 @@ class ListApplicationsView(APIView):
         applications = list_applications(filters)
         serializer = ApplicationListSerializer(applications, many=True)
         return Response(serializer.data)
-        
+
+class ApplicationDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        application = get_application_full(id)
+
+        serializer = ApplicationFullSerializer(
+            application,
+            context={'request': request}
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

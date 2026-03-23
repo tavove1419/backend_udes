@@ -67,3 +67,67 @@ class ApplicationListSerializer(serializers.ModelSerializer):
             'user_last_name',
             'user_email'
         ]
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'name',
+            'last_name',
+            'email',
+            'phone',
+            'document_type',
+            'document_number'
+        ]
+
+
+class RegistrationDetailSerializer(serializers.ModelSerializer):
+    photo_url = serializers.SerializerMethodField()
+    document_url = serializers.SerializerMethodField()
+    diploma_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Registration
+        fields = [
+            'date_birth',
+            'place_birth',
+            'home_address',
+            'stratum',
+            'question_one',
+            'question_two',
+            'question_three',
+            'photo_url',
+            'document_url',
+            'diploma_url'
+        ]
+
+    def get_photo_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.photo.url) if obj.photo else None
+
+    def get_document_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.document.url) if obj.document else None
+
+    def get_diploma_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.diploma.url) if obj.diploma else None
+
+
+class ApplicationFullSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer()
+    registration = RegistrationDetailSerializer()
+
+    class Meta:
+        model = Application
+        fields = [
+            'id',
+            'program',
+            'applicant_type',
+            'status',
+            'observation',
+            'created_at',
+            'user',
+            'registration'
+        ]

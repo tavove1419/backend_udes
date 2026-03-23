@@ -2,6 +2,7 @@ from django.db import transaction
 from ..enums import StatusApplication
 from .notification_service import send_notification
 from ..models import User, Application, Registration
+from django.shortcuts import get_object_or_404
 
 #Aprobar la inscripcion
 
@@ -111,3 +112,11 @@ def list_applications(filters=None):
             queryset = queryset.filter(user_id=user_id)
     
     return queryset
+
+
+def get_application_full(application_id):
+    application = get_object_or_404(
+        Application.objects.select_related('user', 'registration'),
+        id=application_id
+    )
+    return application
