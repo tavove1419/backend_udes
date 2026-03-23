@@ -1,21 +1,69 @@
-Para inicializar el proyecto es necesario que despues de instalados los paquetes y creado el entorno virtual,
-crear el archivo .env y agregar las variables solicitadad
+# Sistema de Registro de Aspirantes
 
-Variables de Entorno
+Backend desarrollado con Django y Django REST Framework para la gestión de preinscripciones, registro completo de aspirantes, validación de documentos y flujo de aprobación.
 
-DB_NAME=Nombre de la base de datos en postgresql
-DB_USER=Usuario de la base de datos
-DB_PASSWORD=contraseña
+---
+
+## Tecnologías utilizadas
+
+- Python 3
+- Django
+- Django REST Framework
+- JWT (SimpleJWT)
+- PostgreSQL
+- django-cors-headers
+- Pillow
+
+---
+
+## Configuración del Proyecto
+
+Para inicializar el proyecto correctamente, sigue estos pasos:
+
+1. Clonar el repositorio  
+2. Crear y activar el entorno virtual  
+3. Instalar dependencias  
+4. Configurar variables de entorno  
+5. Ejecutar migraciones  
+6. Levantar el servidor  
+
+---
+
+## Variables de Entorno
+
+Crear un archivo `.env` en la raíz del proyecto con la siguiente configuración:
+
+```env
+# 🔹 Base de datos PostgreSQL
+DB_NAME=nombre_base_datos
+DB_USER=usuario_db
+DB_PASSWORD=contraseña_db
 DB_HOST=localhost
 DB_PORT=5432
-SECRET_KEY=
+
+# 🔹 Django
+SECRET_KEY=tu_clave_secreta
 DEBUG=True
 
+# 🔹 Configuración de envío de correos
+EMAIL_HOST_USER=tu_correo@gmail.com
+EMAIL_HOST_PASSWORD=clave_app_gmail
 
-#DATA PARA ENVIO DE EMAILS
-EMAIL_HOST_USER=su correo electronico
-EMAIL_HOST_PASSWORD=clave app gmail para el envio de correo
+---
 
-Es necesario que sea configurado un correo con los permisos pertinentes para enviar email desde el proyecto
-en caso de usar uno de gmail realizar la configuración y permisos para obter la clave que permitar el envio de correos
+# CÓMO OTRO DEV LEVANTA TU PROYECTO
+
+```bash
+git clone ...
+cd project
+
+python -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
+
+cp .env.example .env
+
+python manage.py migrate
+python manage.py runserver
 
