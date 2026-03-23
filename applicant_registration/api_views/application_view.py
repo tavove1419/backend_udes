@@ -36,7 +36,7 @@ class CorrectionApplicationView(APIView):
             user=request.user,
             observation=request.data.get('observation')
         )
-        return Response({"message": "Actualización realizada correctamente"})
+        return Response({"message": "Devolución realizada correctamente"})
 
 
 class AcceptRejectApplicationView(APIView):
@@ -63,7 +63,7 @@ class UpdateApplicantApplicationView(APIView):
         update_applicant(
             applicant=application,
             user=request.user,
-            data=request.data
+            data=request
         )
         return Response({"message": "Actualización exitosa!"})
 

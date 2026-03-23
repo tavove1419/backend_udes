@@ -3,6 +3,7 @@ from ..enums import StatusApplication
 from .notification_service import send_notification
 from ..models import User, Application, Registration
 from django.shortcuts import get_object_or_404
+import json
 
 #Aprobar la inscripcion
 
@@ -74,17 +75,25 @@ def update_applicant(applicant, user, data):
 
     with transaction.atomic():
         
+        try:
+            user_data = json.loads(data.data.get('user', '{}'))
+            application_data = json.loads(data.data.get('application', '{}'))
+            registration_data = json.loads(data.data.get('registration', '{}'))
+        except json.JSONDecodeError:
+            raise ValueError("Error al parsear los datos JSON")
+        
         user_obj = applicant.user
-        user_data = data.get('user', {})
 
         for field, value in user_data.items():
-            setattr(user_obj, field, value)
+            if hasattr(user_obj, field):
+                setattr(user_obj, field, value)
+
         user_obj.save()
 
-        application_data = data.get('application', {})
-
         for field, value in application_data.items():
-            setattr(applicant, field, value)
+            if hasattr(applicant, field):
+                setattr(applicant, field, value)
+
         applicant.save()
 
         try:
@@ -92,10 +101,21 @@ def update_applicant(applicant, user, data):
         except Registration.DoesNotExist:
             raise ValueError("Registro no existe")
 
-        registration_data = data.get('registration', {})
-
         for field, value in registration_data.items():
-            setattr(registration, field, value)
+            if hasattr(registration, field):
+                setattr(registration, field, value)
+
+        files = data.FILES if hasattr(data, 'FILES') else {}
+
+        if 'photo' in files:
+            registration.photo = files['photo']
+
+        if 'document' in files:
+            registration.document = files['document']
+
+        if 'diploma' in files:
+            registration.diploma = files['diploma']
+
         registration.save()
 
         applicant.status = StatusApplication.FINA

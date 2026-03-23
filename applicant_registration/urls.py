@@ -10,8 +10,7 @@ from .api_views.application_view import (
     UpdateApplicantApplicationView,
     ListApplicationsView
 )
-from django.conf.urls.static import static
-from django.conf import settings
+
 
 
 urlpatterns = [
@@ -26,4 +25,3 @@ urlpatterns = [
     path('applications/<uuid:id>/', ApplicationDetailView.as_view()),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

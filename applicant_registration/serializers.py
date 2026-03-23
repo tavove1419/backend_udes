@@ -78,7 +78,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
             'email',
             'phone',
             'document_type',
-            'document_number'
+            'document_number',
+            'gender'
         ]
 
 
